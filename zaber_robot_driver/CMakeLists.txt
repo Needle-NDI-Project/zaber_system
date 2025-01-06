@@ -15,6 +15,13 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
+include_directories(/usr/local/include)
+find_library(ZML_LIBRARY
+  NAMES zaber-motion
+  PATHS /usr/local/lib
+  REQUIRED
+)
+
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   controller_manager
   controller_manager_msgs
@@ -39,7 +46,7 @@ target_include_directories(
   PRIVATE
   include
   )
-target_link_libraries(zaber_driver_plugin zml)
+target_link_libraries(zaber_driver_plugin ${ZML_LIBRARY})
 ament_target_dependencies(
   zaber_driver_plugin
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
