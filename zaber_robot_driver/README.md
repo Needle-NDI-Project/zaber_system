@@ -90,13 +90,75 @@ hardware_interface::StateInterface
     sudo apt install ros-$ROS_DISTRO-controller-manager
     ```
 
-2. Build the package:
+2. Download the Zaber Launcher - GUI Tool (Optional):
+    - Visit the [Zaber Downloads](https://software.zaber.com/zaber-launcher/download) page.
+    - Download the latest version for your operating system.
+    - Change ownership and permissions:
+
+        ```bash
+        sudo chmod +x ZaberLauncher.AppImage
+        ```
+
+    - Run the launcher:
+
+        ```bash
+        ./ZaberLauncher.AppImage
+        ```
+
+3. Install the Zaber C++ Motion Library:
+    - Visit the [Zaber Motion Library - Installation](https://software.zaber.com/motion-library/docs/tutorials/install/cpp) page.
+    - Download the respective [Bash Script](https://software.zaber.com/motion-library/docs/tutorials/install/cpp#non-debian-based-distros) for your system.
+    - Run the script:
+
+        ```bash
+        chmod +x ZaberMotionCppInstaller-7.2.2-Linux_x64.sh
+        sudo ./ZaberMotionCppInstaller-7.2.2-Linux_x64.sh --prefix=/usr/local --exclude-subdir
+        ```
+
+    - Verify that the following files exist:
+
+        - Library Files:
+
+            ```plaintext
+            /usr/local/include/zaber/
+            └── motion
+                ├── ascii
+                ├── binary
+                ├── dto
+                │   ├── ascii
+                │   ├── binary
+                │   ├── exceptions
+                │   ├── gcode
+                │   ├── microscopy
+                │   ├── product
+                │   └── requests
+                ├── exceptions
+                ├── gateway
+                ├── gcode
+                ├── microscopy
+                ├── product
+                └── utils
+            ```
+
+        - Library Binaries:
+
+            ```plaintext
+            /usr/local/lib/
+            ├── libzaber-motion-core.so.7.2.2
+            ├── libzaber-motion.so -> libzaber-motion.so.7.2
+            ├── libzaber-motion.so.7.2 -> libzaber-motion.so.7.2.2
+            └── libzaber-motion.so.7.2.2
+            ```
+
+    **Note:** There is an alternative approach to building the library using [debian packages](https://software.zaber.com/motion-library/docs/tutorials/install/cpp#ubuntu-debian-based). However, that method is **NOT** recommended due to compatibility issues.
+
+4. Build the package:
 
     ```bash
     colcon build --packages-select zaber_robot_driver
     ```
 
-3. Setup udev rules:
+5. Setup udev rules:
 
     ```bash
     echo 'SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", MODE="0666"' | sudo tee /etc/udev/rules.d/99-zaber.rules
